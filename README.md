@@ -9,14 +9,14 @@ None
 To clone **and** deploy the project in one command, use `mbed import` and skip to
 the target and toolchain definition:
 
-    mbed import https://gitlab.com/catie_6tron/mbed-os-app-template.git YOUR_PROJECT_NAME
+    mbed import https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
 
 Alternatively:
 
 * Clone to `YOUR_PROJECT_NAME` and enter it:
 
     ```sh
-    git clone https://gitlab.com/catie_6tron/mbed-os-app-template.git YOUR_PROJECT_NAME
+    git clone https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
     cd YOUR_PROJECT_NAME
     ```
 
@@ -40,10 +40,10 @@ Alternatively:
     mbed deploy
     ```
 
-* Define your target (eg. `ZEST_CORE_STM32L496RG`) and toolchain:
+* Define your target (eg. `ZEST_CORE_STM32L4A6RG`) and toolchain:
 
     ```sh
-    mbed target ZEST_CORE_STM32L496RG
+    mbed target ZEST_CORE_STM32L4A6RG
     mbed toolchain GCC_ARM
     ```
 
@@ -61,11 +61,11 @@ Alternatively:
     mbed compile
     ```
 
-* Program the target device (eg. `STM32L496RG` for the Zest_Core_STM32L496RG) with a
+* Program the target device (eg. `STM32L4A6RG` for the Zest_Core_STM32L4A6RG) with a
   J-Link debug probe:
 
     ```sh
-    python dist/program.py STM32L496RG BUILD/ZEST_CORE_STM32L496RG/GCC_ARM/YOUR_PROJECT_NAME.elf
+    python dist/program.py STM32L4A6RG BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/YOUR_PROJECT_NAME.elf
     ```
 
 ## Manage and save your project with Git
