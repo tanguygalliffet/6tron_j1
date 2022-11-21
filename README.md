@@ -20,20 +20,6 @@ Alternatively:
     cd YOUR_PROJECT_NAME
     ```
 
-* Create an empty Mbed configuration file, otherwise Mbed CLI commands won't work:
-
-    On Linux/macOS:
-
-    ```sh
-    touch .mbed on Linux/macOS
-    ```
-
-    Or on Windows:
-
-    ```sh
-    echo.> .mbed
-    ```
-
 * Deploy Mbed OS with:
 
     ```sh
@@ -65,7 +51,7 @@ Alternatively:
   J-Link debug probe:
 
     ```sh
-    python dist/program.py STM32L4A6RG BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/YOUR_PROJECT_NAME.elf
+     sixtron_flash stm32l4a6rg ./BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/mbed-os-basic-template.bin
     ```
 
 ## Manage and save your project with Git
