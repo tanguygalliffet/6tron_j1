@@ -6,24 +6,10 @@ None
 
 ## Usage
 
-To clone **and** deploy the project in one command, use `mbed import` and skip to
-the target and toolchain definition:
+* To clone **and** deploy the project in one command, use `mbed import`:
 
+    ```sh
     mbed import https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
-
-Alternatively:
-
-* Clone to `YOUR_PROJECT_NAME` and enter it:
-
-    ```sh
-    git clone https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
-    cd YOUR_PROJECT_NAME
-    ```
-
-* Deploy Mbed OS with:
-
-    ```sh
-    mbed deploy
     ```
 
 * Define your target (eg. `ZEST_CORE_STM32L4A6RG`) and toolchain:
@@ -33,10 +19,10 @@ Alternatively:
     mbed toolchain GCC_ARM
     ```
 
-* Export to Eclipse IDE with:
+* Export to VS Code IDE with:
 
     ```sh
-    mbed export -i eclipse_6tron
+    mbed export -i vscode_gcc_arm
     ```
 
 ## Compiling and programming without IDE
