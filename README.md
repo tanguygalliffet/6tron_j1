@@ -6,15 +6,35 @@ None
 
 ## Usage
 
-* To clone **and** deploy the project in one command, use `mbed import`:
+* To clone the project:
 
     ```sh
-    mbed import https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
+    git clone https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
+    cd YOUR_PROJECT_NAME
+    ```
+
+* Open the project in your VS Code IDE and start DevContainer:
+
+    ```sh
+    Remote-Containers: Reopen in Container
+    ```
+
+* Launch the development container:
+
+    ```sh
+    Dev Containers: Open Folder in Container...
+    ```
+
+* deploy the project:
+
+    ```sh
+    mbed deploy
     ```
 
 * Define your target (eg. `ZEST_CORE_STM32L4A6RG`) and toolchain:
 
     ```sh
+    mbed config root .
     mbed target ZEST_CORE_STM32L4A6RG
     mbed toolchain GCC_ARM
     ```
@@ -37,7 +57,7 @@ None
   J-Link debug probe:
 
     ```sh
-     sixtron_flash stm32l4a6rg ./BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/mbed-os-basic-template.bin
+    sixtron_flash stm32l4a6rg ./BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/mbed-os-basic-template.bin
     ```
 
 ## Manage and save your project with Git
