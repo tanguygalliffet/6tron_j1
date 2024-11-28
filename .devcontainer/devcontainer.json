@@ -5,6 +5,9 @@
     // "mounts": [
     //     "source=/dev/bus/usb,target=/dev/bus/usb,type=bind"
     // ],
+    "runArgs": [
+        "--privileged"
+    ],
     "features": {
         "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
     }
