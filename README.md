@@ -16,7 +16,6 @@ None
 > [!IMPORTANT]
 > Cloning to a container volume in WSL increases massively the performance.
 
-
 ### Linux
 
 - Clone the project:
@@ -28,7 +27,7 @@ None
 
 - Open the project in VS Code IDE:
 
-    ```
+    ```shell
     cd YOUR_PROJECT_NAME
     code .
     ```
