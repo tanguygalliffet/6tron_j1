@@ -6,67 +6,65 @@ None
 
 ## Usage
 
-* To clone the project:
+### Windows
 
-    ```sh
+- Open VS Code IDE.
+
+- Clone the repository directly in a Dev Container, in the desited volume:
+  `Dev Containers: Clone Repository in Named Container Volume`
+
+> [!IMPORTANT]
+> Cloning to a container volume in WSL increases massively the performance.
+
+
+### Linux
+
+- Clone the project:
+
+    ```shell
     git clone https://gitlab.com/catie_estia-students/mbed-os-basic-template.git YOUR_PROJECT_NAME
     cd YOUR_PROJECT_NAME
     ```
 
-* Open the project in your VS Code IDE and start DevContainer:
+- Open the project in VS Code IDE:
 
-    ```sh
-    Remote-Containers: Reopen in Container
+    ```
+    cd YOUR_PROJECT_NAME
+    code .
     ```
 
-* Launch the development container:
+- Launch the Dev Container:
 
-    ```sh
-    Dev Containers: Open Folder in Container...
+    ```
+    Dev Containers: Reopen in Container
     ```
 
-* deploy the project:
+- In a VS Code terminal, export the project:
 
-    ```sh
-    mbed deploy
-    ```
-
-* Define your target (eg. `ZEST_CORE_STM32L4A6RG`) and toolchain:
-
-    ```sh
-    mbed config root .
-    mbed target ZEST_CORE_STM32L4A6RG
-    mbed toolchain GCC_ARM
-    ```
-
-* Export to VS Code IDE with:
-
-    ```sh
+    ```shell
     mbed export -i vscode_gcc_arm
     ```
 
-## Compiling and programming without IDE
+## Build and Flash
 
-* Compile the project:
+- Compile the project:
 
-    ```sh
+    ```shell
+    mbed deploy # Deploy the dependencies
     mbed compile
     ```
 
-* Program the target device (eg. `STM32L4A6RG` for the Zest_Core_STM32L4A6RG) with a
-  J-Link debug probe:
+- Program the target device with the compiled binary using a J-Link debug probe:
 
-    ```sh
-    sixtron_flash stm32l4a6rg ./BUILD/ZEST_CORE_STM32L4A6RG/GCC_ARM/mbed-os-basic-template.bin
+    ```shell
+    sixtron_flash
     ```
 
-## Manage and save your project with Git
+## Export to your repository
 
-* Edit `README.md` file
+Modify the remote URL to point to your repository and push the source code:
 
-* Modify remote URL to point to your repository and push the application template:
-
-    ```sh
-    git remote set-url origin YOUR_REPOSITORY_URL
-    git push -u origin master
-    ```
+```shell
+git remote set-url origin YOUR_REPOSITORY_URL
+git push -u origin main
+```
