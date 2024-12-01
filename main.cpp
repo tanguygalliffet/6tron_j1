@@ -10,8 +10,8 @@ namespace {
 
 int main()
 {
-	while (true) {
-		printf("Alive! \n");
-		ThisThread::sleep_for(PERIOD_MS / 2);
-	}
+    while (true) {
+        printf("Alive! \n");
+        ThisThread::sleep_for(PERIOD_MS / 2);
+    }
 }
