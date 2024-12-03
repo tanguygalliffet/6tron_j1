@@ -1,29 +1,44 @@
 #include "mbed.h"
+#include "bme280/bme280.h" 
 
 Thread thread_sensor;       
 Thread thread_led;          
 EventQueue event_queue;    
 DigitalOut led(LED1);     
 InterruptIn button(BUTTON1);  
-
-// SIMUS
-float get_temperature() { return 25.0f + rand() % 10; } 
-float get_humidity() { return 50.0f + rand() % 20; } 
-float get_pressure() { return 1013.25f + rand() % 10; }
-
-
 Mutex print_mutex;
+
+using namespace sixtron;
+
+
+namespace
+{
+    constexpr auto SDA_PIN = I2C1_SDA;
+    constexpr auto SCL_PIN = I2C1_SCL;
+    constexpr auto I2C_ADDRESS = BME280::I2CAddress::Address1;
+}
+
+
+I2C i2c(SDA_PIN, SCL_PIN);
+BME280 sensor(&i2c, I2C_ADDRESS);
+
+
+volatile float temperature = 0.0f;
+volatile float humidity = 0.0f;
+volatile float pressure = 0.0f;
 
 
 void read_sensor_data()
 {
     while (true) {
-        float temperature = get_temperature();
-        float humidity = get_humidity();
+        
+        temperature = sensor.temperature();
+        humidity = sensor.humidity();
 
+      
         print_mutex.lock();
-        printf("Temperature : %.2f degres celsius\n", temperature);
-        printf("Humidite : %.2f %%\n", humidity);
+        printf("Température : %.2f °C\n", temperature);
+        printf("Humidité : %.2f %%\n", humidity);
         print_mutex.unlock();
 
         ThisThread::sleep_for(2s); 
@@ -33,10 +48,10 @@ void read_sensor_data()
 
 void display_pressure()
 {
-    float pressure = get_pressure();
+    pressure = sensor.pressure();
 
     print_mutex.lock();
-    printf("Pression atmospherique : %.2f hPa\n", pressure);
+    printf("Pression atmosphérique : %.2f hPa\n", pressure / 100.0); // Conversion en hPa
     print_mutex.unlock();
 }
 
@@ -49,7 +64,7 @@ void blink_led()
     }
 }
 
-
+// Fonction appelée par le bouton pour planifier l'affichage de la pression
 void schedule_pressure()
 {
     event_queue.call(display_pressure);
@@ -57,13 +72,30 @@ void schedule_pressure()
 
 int main()
 {
-    
+   
+    if (sensor.initialize() != 0) {
+        printf("Erreur d'initialisation du capteur BME280\n");
+        return 1;
+    }
+    printf("Capteur BME280 initialisé avec succès\n");
+
+    // config
+    sensor.set_sampling(
+        BME280::SensorMode::NORMAL,
+        BME280::SensorSampling::OVERSAMPLING_X16, // température
+        BME280::SensorSampling::OVERSAMPLING_X16, // pression
+        BME280::SensorSampling::OVERSAMPLING_X16, // humidité
+        BME280::SensorFilter::OFF,                // Pas de filtrage
+        BME280::StandbyDuration::MS_0_5           // Durée de veille
+    );
+
+    // Configuration du bouton pour planifier l'affichage de la pression
     button.fall(schedule_pressure);
 
-    
+    // Démarrage des threads
     thread_sensor.start(read_sensor_data);
     thread_led.start(blink_led);
 
-   
+    // Démarrage de la file d'événements
     event_queue.dispatch_forever();
 }
