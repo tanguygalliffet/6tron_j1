@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/Ossama.erraki/Documents/3A/Concevoir facilement un objet connecté grâce à la plateforme de prototypage rapide 6TRON/6Tron/6tron_j1",
+      "program": "c:/Users/Ossama.erraki/Documents/3A/Concevoir facilement un objet connecté grâce à la plateforme de prototypage rapide 6TRON/6Tron/6tron_j1/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
