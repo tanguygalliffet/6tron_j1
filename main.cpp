@@ -21,16 +21,26 @@ volatile float humidity = 0.0f;
 volatile float pressure = 0.0f;
 volatile bool running = true; // Indicateur pour arrêter le thread
 
-// Fonction pour lire les données du capteur
+// Fonction pour configurer et lire les données du capteur
 void read_sensor()
 {
     if (sensor.initialize() == 0) {
-        printf("Erreur : Initialisation du capteur BME280 echouee\n");
+        printf("Erreur : Initialisation du capteur BME280 échouee\n");
         running = false;
         return;
     }
 
-    printf("Capteur BME280 initialise avec succes\n");
+    // Configuration du capteur
+    sensor.set_sampling(
+        BME280::SensorMode::NORMAL,
+        BME280::SensorSampling::OVERSAMPLING_X16, // Échantillonnage pour la température
+        BME280::SensorSampling::OVERSAMPLING_X16, // Échantillonnage pour la pression
+        BME280::SensorSampling::OVERSAMPLING_X16, // Échantillonnage pour l'humidité
+        BME280::SensorFilter::OFF,                // Pas de filtrage
+        BME280::StandbyDuration::MS_0_5           // Durée de veille
+    );
+
+    printf("Capteur BME280 configure avec succes \n");
 
     while (running) {
         temperature = sensor.temperature();
@@ -49,9 +59,9 @@ int main()
 
     // Boucle principale pour afficher les données
     while (running) {
-        printf("Temperature : %.2f deg Celsius\n", temperature);
+        printf("Temperature : %.2f deg Celsius \n", temperature);
         printf("Humidite : %.2f %% \n", humidity);
-        printf("Pression : %.2f hPa\n", pressure / 100.0);
+        printf("Pression : %.2f hPa \n", pressure / 100.0);
 
         ThisThread::sleep_for(1s); // Affichage toutes les secondes
     }
