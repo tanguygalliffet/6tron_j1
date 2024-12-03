@@ -1,15 +1,15 @@
 #include "mbed.h"
 
 
-Thread thread_ping;
-Thread thread_pong;
+Thread thread_ping(osPriority::osPriorityAboveNormal);
+Thread thread_pong(osPriority::osPriorityBelowNormal);
 DigitalOut led(LED1);
 Mutex print_mutex; // Mutex pour protéger l'accès aux sorties console
 
 
 void ping()
 {
-    for (int i = 0; i < 100; i++) {
+    while (true) {
         print_mutex.lock(); 
         printf("Ping\n");
         print_mutex.unlock(); 
@@ -20,7 +20,7 @@ void ping()
 
 void pong()
 {
-    for (int i = 0; i < 100; i++) {
+    while (true) {
         print_mutex.lock(); 
         printf("Pong\n");
         print_mutex.unlock(); 
@@ -31,6 +31,9 @@ void pong()
 int main()
 {
     
+
+
+
     thread_ping.start(ping);
     thread_pong.start(pong);
 
