@@ -1,60 +1,63 @@
-/*
- * Copyright (c) 2022, CATIE
- * SPDX-License-Identifier: Apache-2.0
- */
 #include "mbed.h"
+#include "bme280.h"
 
-// Déclaration des périphériques
-DigitalOut led(LED1);
-InterruptIn button(BUTTON1);
-Timer button_timer;
-EventQueue queue(32 * EVENTS_EVENT_SIZE); // Queue pour déplacer les actions hors ISR
-Thread thread;                           // Thread pour exécuter la queue d'événements
+using namespace sixtron;
 
-// Variables globales pour stocker l'état du bouton
-bool is_button_pressed = false;
-
-// Fonction appelée dans le thread principal pour gérer l'appui
-void handle_button_press()
+// Définition des constantes
+namespace
 {
-    printf("Bouton appuyé\n");
-    led = 1;               // Allumer la LED
-    button_timer.start();  // Démarrer le timer
+    constexpr auto SDA_PIN = I2C1_SDA;
+    constexpr auto SCL_PIN = I2C1_SCL;
+    constexpr auto I2C_ADDRESS = BME280::I2CAddress::Address1;
 }
 
-// Fonction appelée dans le thread principal pour gérer le relâchement
-void handle_button_release()
-{
-    button_timer.stop();                 // Arrêter le timer
-    int duration = button_timer.read_ms(); // Lire la durée d'appui
-    printf("Bouton relâché, durée : %d ms\n", duration);
-    led = 0;                             // Éteindre la LED
-    button_timer.reset();                // Réinitialiser le timer
-}
+// Initialisation des objets nécessaires
+I2C i2c(SDA_PIN, SCL_PIN);
+BME280 sensor(&i2c, I2C_ADDRESS);
 
-// Fonction appelée dans le contexte ISR pour l'appui
-void on_button_press()
-{
-    queue.call(handle_button_press); // Planifie l'exécution hors de l'ISR
-}
+// Variables partagées pour stocker les données
+volatile float temperature = 0.0f;
+volatile float humidity = 0.0f;
+volatile float pressure = 0.0f;
+volatile bool running = true; // Indicateur pour arrêter le thread
 
-// Fonction appelée dans le contexte ISR pour le relâchement
-void on_button_release()
+// Fonction pour lire les données du capteur
+void read_sensor()
 {
-    queue.call(handle_button_release); // Planifie l'exécution hors de l'ISR
+    if (sensor.initialize() == 0) {
+        printf("Erreur : Initialisation du capteur BME280 echouee\n");
+        running = false;
+        return;
+    }
+
+    printf("Capteur BME280 initialise avec succes\n");
+
+    while (running) {
+        temperature = sensor.temperature();
+        humidity = sensor.humidity();
+        pressure = sensor.pressure();
+
+        ThisThread::sleep_for(1s); // Lecture toutes les secondes
+    }
 }
 
 int main()
 {
-    // Configurer les interruptions
-    button.rise(&on_button_press);   // Appelé lors de l'appui
-    button.fall(&on_button_release); // Appelé lors du relâchement
+    // Création et démarrage du thread
+    Thread thread;
+    thread.start(read_sensor);
 
-    // Démarrer le thread pour exécuter la queue d'événements
-    thread.start(callback(&queue, &EventQueue::dispatch_forever));
+    // Boucle principale pour afficher les données
+    while (running) {
+        printf("Temperature : %.2f deg Celsius\n", temperature);
+        printf("Humidite : %.2f %% \n", humidity);
+        printf("Pression : %.2f hPa\n", pressure / 100.0);
 
-    while (true) {
-        // Le thread principal reste disponible pour d'autres tâches
-        ThisThread::sleep_for(100ms);
+        ThisThread::sleep_for(1s); // Affichage toutes les secondes
     }
+
+    // Attendre que le thread se termine proprement
+    thread.join();
+
+    printf("Fin de l'application.\n");
 }
