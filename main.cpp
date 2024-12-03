@@ -73,7 +73,7 @@ void schedule_pressure()
 int main()
 {
    
-    if (sensor.initialize() != 0) {
+    if (sensor.initialize() != true) {
         printf("Erreur d'initialisation du capteur BME280\n");
         return 1;
     }
